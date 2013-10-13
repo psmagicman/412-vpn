@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,6 +24,7 @@ public class GUI_Server extends JFrame {
 	private JLabel send_message_label;
 	private JTextArea receive_message;
 	private JLabel receive_message_label;
+	private JButton port_button;
 	
 	private JPanel frame_grid;
 	
@@ -61,20 +63,34 @@ public class GUI_Server extends JFrame {
 		receive_message.setEditable(false);
 		
 		// buttons
+		port_button = new JButton("Open Port");
 		
 		// set grid panels
 		JPanel frame_grid = new JPanel();
-		frame_grid.setLayout(new GridLayout(3, 2));
+		JPanel text_grid = new JPanel();
+		JPanel button_grid = new JPanel();
+		frame_grid.setLayout(new GridLayout(4, 1));
+		text_grid.setLayout(new GridLayout(3, 2));
+		button_grid.setLayout(new GridLayout(1, 2));
 		
-		// add the elements to the panel
-		frame_grid.add(port_label);
-		frame_grid.add(port);
-		frame_grid.add(send_message_label);
-		frame_grid.add(send_message);
-		frame_grid.add(receive_message_label);
-		frame_grid.add(receive_message);
+		// add the elements to text_grid panel
+		text_grid.add(port_label);				// (1,1)
+		text_grid.add(port);					// (1,2)
+		text_grid.add(send_message_label);		// (2,1)
+		text_grid.add(send_message);			// (2,2)
+		text_grid.add(receive_message_label);	// (3,1)
+		text_grid.add(receive_message);			// (3,2)
 		
-		// add the panel to the frame
+		// add the button to button_grid panel
+		button_grid.add(port_button);
+		
+		// add the sub-grids to the main grid
+		frame_grid.add(text_grid);
+		// row 2 
+		// row 3
+		frame_grid.add(port_button);
+		
+		// add to grid to the frame
 		add(frame_grid);
 	}
 
