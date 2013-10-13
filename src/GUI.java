@@ -43,7 +43,7 @@ public class GUI extends JFrame {
 		frame_title = new JLabel("VPN Client/Server Toggle");
 		client_toggle = new JRadioButton("Client");
 		server_toggle = new JRadioButton("Server");
-		toggle_confirm = new JButton("Submit");
+		toggle_confirm = new JButton("Test Crypto");	// name changed to test crypto class
 		
 		// add the radios to a button group
 		ButtonGroup group = new ButtonGroup();
@@ -74,6 +74,12 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				GUI_Server server_gui = new GUI_Server();
+			}
+		});
+		
+		toggle_confirm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				VPN_Crypto crypto = new VPN_Crypto();
 			}
 		});
 		
