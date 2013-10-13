@@ -65,7 +65,8 @@ public class GUI extends JFrame {
 		
 		client_toggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("client");
+				setVisible(false);
+				GUI_Client client_gui = new GUI_Client();
 			}
 		});
 		
