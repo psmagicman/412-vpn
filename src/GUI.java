@@ -22,10 +22,9 @@ public class GUI extends JFrame {
 		screen = toolkit.getScreenSize();
 		setLocation(screen.width / 2 - getWidth() / 2, screen.height / 2 - getHeight() / 2);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
 		setLayout(new BorderLayout());
 		define_variables();
-		
+		setVisible(true);
 	}
 	
 	/**
@@ -54,9 +53,5 @@ public class GUI extends JFrame {
 		buttons_area.add(server_toggle);
 		buttons_area.add(toggle_confirm);
 		add(buttons_area);
-		
 	}
-	
-	
-	
 }
