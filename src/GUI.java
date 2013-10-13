@@ -9,9 +9,13 @@ public class GUI extends JFrame {
 	private JRadioButton client_toggle;
 	private JRadioButton server_toggle;
 	private JButton toggle_confirm;
+	private JButton crypto_test;
 	private JPanel buttons_area;
 	private Toolkit toolkit;
 	private Dimension screen;
+	private enum toggle { Client, Server };
+	
+	private toggle toggle_switch = toggle.Client;
 	/** End of Variables **/
 	
 	public GUI() {
@@ -37,13 +41,14 @@ public class GUI extends JFrame {
 	 */
 	private void define_variables() {
 		JPanel buttons_area = new JPanel();
-		buttons_area.setLayout(new GridLayout(3, 1));
+		buttons_area.setLayout(new GridLayout(4, 1));
 		
 		// define the buttons and title
 		frame_title = new JLabel("VPN Client/Server Toggle");
 		client_toggle = new JRadioButton("Client");
 		server_toggle = new JRadioButton("Server");
-		toggle_confirm = new JButton("Test Crypto");	// name changed to test crypto class
+		toggle_confirm = new JButton("Start");
+		crypto_test = new JButton("Test Crypto");
 		
 		// add the radios to a button group
 		ButtonGroup group = new ButtonGroup();
@@ -54,6 +59,7 @@ public class GUI extends JFrame {
 		buttons_area.add(client_toggle);
 		buttons_area.add(server_toggle);
 		buttons_area.add(toggle_confirm);
+		buttons_area.add(crypto_test);
 		add(buttons_area);
 	}
 	
@@ -63,21 +69,35 @@ public class GUI extends JFrame {
 	 */
 	private void gui_listener() {
 		
+		
 		client_toggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				GUI_Client client_gui = new GUI_Client();
+				toggle_switch = toggle.Client;
 			}
 		});
 		
 		server_toggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				GUI_Server server_gui = new GUI_Server();
+				toggle_switch = toggle.Server;
 			}
 		});
 		
 		toggle_confirm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				switch (toggle_switch) {
+					case Client:
+						setVisible(false);
+						GUI_Client client_gui = new GUI_Client();
+						break;
+					case Server:
+						setVisible(false);
+						GUI_Server server_gui = new GUI_Server();
+						break;
+				}
+			}
+		});
+		
+		crypto_test.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				VPN_Crypto crypto = new VPN_Crypto();
 			}
