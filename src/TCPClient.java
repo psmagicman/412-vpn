@@ -2,12 +2,12 @@ import java.net.*;
 import java.io.*;
 
 public class TCPClient {
-	public static void main (String args[])
+	public void main (String args[])
 	{
 		// values specified from the GUI
 		String clientMessage = "hello world";
-		int port = 2345;
-		String hostname = "localhost";
+		String hostname = args[0];
+		int port = Integer.parseInt(args[1]);
 		
 		try {
 			Socket clientSocket = new Socket(hostname, port);
