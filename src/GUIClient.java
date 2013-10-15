@@ -4,18 +4,21 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 
 public class GUIClient extends JFrame {
 
+	Socket clientSocket = null;
+	
 	/** Variables **/
 	private Toolkit toolkit;
 	private Dimension screen;
@@ -27,7 +30,7 @@ public class GUIClient extends JFrame {
 	private JLabel port_label;
 	private JTextField send_message;
 	private JLabel send_message_label;
-	private JTextArea receive_message;
+	private JTextField receive_message;
 	private JLabel receive_message_label;
 	private JLabel shared_key_label;
 	private JTextField shared_key;
@@ -74,7 +77,7 @@ public class GUIClient extends JFrame {
 		port = new JTextField(5);
 		send_message = new JTextField();
 		//send_message.setEditable(false);
-		receive_message = new JTextArea();
+		receive_message = new JTextField();
 		receive_message.setEditable(false);
 		shared_key = new JTextField();
 		
@@ -83,7 +86,7 @@ public class GUIClient extends JFrame {
 		// set grid panels
 		JPanel frame_grid = new JPanel();
 		frame_grid.setBorder(new EmptyBorder(10, 10, 10, 10) );
-		frame_grid.setLayout(new GridLayout(6, 2));
+		frame_grid.setLayout(new GridLayout(6, 2, 0, 3));
 		
 		// add the elements to the panel
 		frame_grid.add(hostname_label);
@@ -111,13 +114,24 @@ public class GUIClient extends JFrame {
 
 		message_connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			    String [] args = new String[3];
-				args[0] =  hostname.getText();
-			    args[1] = port.getText();
-			    args[2] = shared_key.getText();
-				System.out.println("connect");
 				TCPClient tcp_client = new TCPClient();
-				tcp_client.main(args);
+				if (clientSocket == null) {
+				    String [] args = new String[3];
+					args[0] =  hostname.getText();
+				    args[1] = port.getText();
+				    args[2] = shared_key.getText();
+					System.out.println("connect");
+					tcp_client.main(args);
+					
+					clientSocket = tcp_client.getClientSocket();
+					
+				} else {
+					try {
+						clientSocket.close();
+					} catch (IOException error) {
+						System.out.println("IOException: " + error.getMessage());
+					}
+				}
 			}
 		});
 		
