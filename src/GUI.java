@@ -87,11 +87,11 @@ public class GUI extends JFrame {
 				switch (toggle_switch) {
 					case Client:
 						setVisible(false);
-						GUI_Client client_gui = new GUI_Client();
+						GUIClient client_gui = new GUIClient();
 						break;
 					case Server:
 						setVisible(false);
-						GUI_Server server_gui = new GUI_Server();
+						GUIServer server_gui = new GUIServer();
 						break;
 				}
 			}
@@ -99,7 +99,7 @@ public class GUI extends JFrame {
 		
 		crypto_test.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VPN_Crypto crypto = new VPN_Crypto();
+				VPNCrypto crypto = new VPNCrypto();
 			}
 		});
 		

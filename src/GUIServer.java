@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 
-public class GUI_Server extends JFrame {
+public class GUIServer extends JFrame {
 
 	/** Variables **/
 	private Toolkit toolkit;
@@ -30,7 +30,7 @@ public class GUI_Server extends JFrame {
 	
 	/** End Variables **/
 	
-	public GUI_Server() {
+	public GUIServer() {
 		
 		setSize(800, 600);
 		toolkit = getToolkit();

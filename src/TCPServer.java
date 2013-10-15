@@ -2,7 +2,7 @@ import java.net.*;
 import java.io.*;
 
 public class TCPServer {
-	public static void main (String args[])
+	public void main (String args[])
 	{
 		// port number needs to be grabbed from the GUI
 		int port = 2345;
@@ -26,7 +26,7 @@ public class TCPServer {
 	 *  
 	 *  Prints string message from client buffer
 	 */
-	public static void printClientString(Socket clientSocket) {
+	public void printClientString(Socket clientSocket) {
 		try {
 			BufferedReader clientBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			String clientMessage = clientBuffer.readLine();

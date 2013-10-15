@@ -37,11 +37,11 @@ import java.util.*;
 		}
  */
 
-public class VPN_Crypto {
+public class VPNCrypto {
 
 	private byte[] iv;
 
-	public VPN_Crypto() {
+	public VPNCrypto() {
 
 	}
 	
