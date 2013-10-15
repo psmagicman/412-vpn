@@ -18,7 +18,18 @@ public class GUI extends JFrame {
 	private enum toggle { Client, Server };
 	
 	private toggle toggle_switch = toggle.Client;
+	
+	private Step_Tracer trace;
 	/** End of Variables **/
+	
+	/** Test Variables **/
+	private JTextField test_insert;
+	private JButton test_send_step;
+	private JTextField test_get;
+	private JButton test_get_step;
+	private JPanel test_panel;
+	private JPanel super_test_panel;
+	/** End Test Variables **/
 	
 	public GUI() {
 		
@@ -32,7 +43,10 @@ public class GUI extends JFrame {
 		setLayout(new BorderLayout());
 		define_variables();
 		setTitle(frame_title.getText());
+		
 		setVisible(true);
+		
+		trace = new Step_Tracer();
 		
 		gui_listener();
 	}
@@ -63,7 +77,15 @@ public class GUI extends JFrame {
 		buttons_area.add(server_toggle);
 		buttons_area.add(toggle_confirm);
 		buttons_area.add(crypto_test);
-		add(buttons_area);
+		
+		JPanel test_panel = define_test();
+		
+		JPanel super_test_panel = new JPanel();
+		super_test_panel.setLayout(new GridLayout(2,1));
+		super_test_panel.add(buttons_area);
+		super_test_panel.add(test_panel);
+		add(super_test_panel);
+		
 	}
 	
 	/**
@@ -71,7 +93,6 @@ public class GUI extends JFrame {
 	 * This function is responsible for actionlistener of the radio buttons
 	 */
 	private void gui_listener() {
-		
 		
 		client_toggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -105,6 +126,44 @@ public class GUI extends JFrame {
 				VPNCrypto crypto = new VPNCrypto();
 			}
 		});
+		
+		test_send_step.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String test_step = test_insert.getText();
+				//System.out.println(test_step);
+				trace.insert_steps(test_step);
+			}
+		});
+		
+		test_get_step.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String text = trace.print_steps();
+				//JTextArea temp = new JTextArea(text);
+				test_get.setText(text);
+			}
+		});
+		
+	}
+	
+	private JPanel define_test() {
+		JPanel test_panel = new JPanel();
+		test_panel.setLayout(new GridLayout(2,2));
+		
+		test_insert = new JTextField(null);
+		test_send_step = new JButton("Test Insert");
+		test_get = new JTextField("hurrr");
+		test_get.setEditable(false);
+		test_get_step = new JButton("Test Get");
+		
+		test_panel.add(test_insert);
+		test_panel.add(test_send_step);
+		test_panel.add(test_get);
+		test_panel.add(test_get_step);
+		
+		add(test_panel);
+		
+		return test_panel;
 		
 	}
 }
