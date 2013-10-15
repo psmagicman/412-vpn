@@ -7,8 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 
 public class GUIServer extends JFrame {
@@ -20,9 +20,9 @@ public class GUIServer extends JFrame {
 	private JLabel frame_title;
 	private JTextField port;
 	private JLabel port_label;
-	private JTextArea send_message;
+	private JTextField send_message;
 	private JLabel send_message_label;
-	private JTextArea receive_message;
+	private JTextField receive_message;
 	private JLabel receive_message_label;
 	private JButton port_button;
 	private JButton message_send;
@@ -33,7 +33,7 @@ public class GUIServer extends JFrame {
 	
 	public GUIServer() {
 		
-		setSize(800, 600);
+		setSize(400, 300);
 		toolkit = getToolkit();
 		screen = toolkit.getScreenSize();
 		setLocation(screen.width / 2 - getWidth() / 2, screen.height / 2 - getHeight() / 2);
@@ -58,9 +58,8 @@ public class GUIServer extends JFrame {
 		
 		// textfields/textareas
 		port = new JTextField(5);
-		send_message = new JTextArea();
-		//send_message.setEditable(false);
-		receive_message = new JTextArea();
+		send_message = new JTextField();
+		receive_message = new JTextField();
 		receive_message.setEditable(false);
 		
 		// buttons
@@ -69,7 +68,8 @@ public class GUIServer extends JFrame {
 		
 		// set grid panels
 		JPanel frame_grid = new JPanel();
-		frame_grid.setLayout(new GridLayout(4, 1));
+		frame_grid.setBorder(new EmptyBorder(10, 10, 10, 10) );
+		frame_grid.setLayout(new GridLayout(4, 1, 0, 3));
 
 		
 		// add the elements to text_grid panel

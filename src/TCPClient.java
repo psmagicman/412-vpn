@@ -2,6 +2,7 @@ import java.net.*;
 import java.io.*;
 
 public class TCPClient {
+	private Socket clientSocket;
 	public void main (String args[])
 	{
 		// values specified from the GUI
@@ -11,14 +12,22 @@ public class TCPClient {
 		String sharedKey = args[2];
 		
 		try {
-			Socket clientSocket = new Socket(hostname, port);
+			clientSocket = new Socket(hostname, port);
 			DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
 			toServer.writeBytes(clientMessage);
 			
-			clientSocket.close();
+			//clientSocket.close();
 	
 		} catch (IOException e){
 			System.out.println("IOException Client: " + e.getMessage());
 		}
+	}
+	
+	public Socket getClientSocket(){
+		return clientSocket;
+	}
+	
+	public void writeMessage(){
+		
 	}
 }
