@@ -25,6 +25,7 @@ public class GUIServer extends JFrame {
 	private JTextArea receive_message;
 	private JLabel receive_message_label;
 	private JButton port_button;
+	private JButton message_send;
 	
 	private JPanel frame_grid;
 	
@@ -58,37 +59,31 @@ public class GUIServer extends JFrame {
 		// textfields/textareas
 		port = new JTextField(5);
 		send_message = new JTextArea();
-		send_message.setEditable(false);
+		//send_message.setEditable(false);
 		receive_message = new JTextArea();
 		receive_message.setEditable(false);
 		
 		// buttons
 		port_button = new JButton("Open Port");
+		message_send = new JButton("Message Send");
 		
 		// set grid panels
 		JPanel frame_grid = new JPanel();
-		JPanel text_grid = new JPanel();
-		JPanel button_grid = new JPanel();
 		frame_grid.setLayout(new GridLayout(4, 1));
-		text_grid.setLayout(new GridLayout(3, 2));
-		button_grid.setLayout(new GridLayout(1, 2));
+
 		
 		// add the elements to text_grid panel
-		text_grid.add(port_label);				// (1,1)
-		text_grid.add(port);					// (1,2)
-		text_grid.add(send_message_label);		// (2,1)
-		text_grid.add(send_message);			// (2,2)
-		text_grid.add(receive_message_label);	// (3,1)
-		text_grid.add(receive_message);			// (3,2)
+		frame_grid.add(port_label);				// (1,1)
+		frame_grid.add(port);					// (1,2)
+		frame_grid.add(send_message_label);		// (2,1)
+		frame_grid.add(send_message);			// (2,2)
+
 		
 		// add the button to button_grid panel
-		button_grid.add(port_button);
-		
-		// add the sub-grids to the main grid
-		frame_grid.add(text_grid);
-		// row 2 
-		// row 3
 		frame_grid.add(port_button);
+		frame_grid.add(message_send);
+		frame_grid.add(receive_message_label);	// (3,1)
+		frame_grid.add(receive_message);			// (3,2)		
 		
 		// add to grid to the frame
 		add(frame_grid);
