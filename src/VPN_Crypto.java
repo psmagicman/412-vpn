@@ -15,19 +15,15 @@ import java.util.*;
  * 1. get the plain text
  * 2. generate the key
  * 3. pass into the block cipher
- * 4. get the cipher text 
- */
-
-public class VPN_Crypto {
-
-	private byte[] iv;
-	
-	public VPN_Crypto() {
-		try {
+ * 4. get the cipher text
+ * 
+ * 	Example of how to use the crypto java file
+ * 		try {
 			SecretKey my_key = generate_secret_key("yolo");
+			String message = "hello";
 			System.out.println("key = yolo");
-			System.out.println("plaintext = my cleartext");
-			byte[] cipher = encrypt_AES(my_key);
+			System.out.println("message = " + message);
+			byte[] cipher = encrypt_AES(my_key, message);
 			System.out.println("-------");
 			
 			String plaintext = decrypt_AES(my_key, cipher);
@@ -39,19 +35,40 @@ public class VPN_Crypto {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}
-		
+ */
+
+public class VPN_Crypto {
+
+	private byte[] iv;
+
+	public VPN_Crypto() {
+
 	}
 	
 	// http://stackoverflow.com/questions/4319496/how-to-encrypt-and-decrypt-data-in-java
 	// http://www.coderanch.com/t/525677/Security/AES-decryption-InvalidKeyException-Parameters-missing
-	public byte[] encrypt_AES(SecretKey key) throws Exception {
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 * @throws Exception
+	 */
+	public byte[] encrypt_AES(SecretKey key, String message) throws Exception {
 		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		aes.init(Cipher.ENCRYPT_MODE, key);
+		// need to have the iv carry over or else there will be an invalid key exception thrown at the decryption phase
 		iv = aes.getIV();
 		
-		return aes.doFinal("my cleartext".getBytes());
+		return aes.doFinal(message.getBytes());
 	}
 	
+	/**
+	 * 
+	 * @param key
+	 * @param ciphertext
+	 * @return
+	 * @throws Exception
+	 */
 	public String decrypt_AES(SecretKey key, byte[] ciphertext) throws Exception {
 		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		aes.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
@@ -62,13 +79,15 @@ public class VPN_Crypto {
 	/**
 	 * generate_secret_key function
 	 * This function uses the SecretKeyFactory to generate a key with a salt
+	 * @param input_key
+	 * @return
 	 * @throws Exception 
 	 */
 	public SecretKey generate_secret_key(String input_key) throws Exception {
 		
-		// hash a passphrase with SHA1
-		String passphrase = "Julien is the best";
-		MessageDigest digest = MessageDigest.getInstance("MD5");
+		// hash the passphrase with some message digest algorithm
+		String passphrase = "Julien is the best";		// change the passphrase?
+		MessageDigest digest = MessageDigest.getInstance("SHA-512");
 		digest.update(passphrase.getBytes());
 		
 		// generate key with a salt
