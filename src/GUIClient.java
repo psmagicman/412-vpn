@@ -111,13 +111,21 @@ public class GUIClient extends JFrame {
 
 		message_connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			    String [] args = new String[3];
-				args[0] =  hostname.getText();
-			    args[1] = port.getText();
-			    args[2] = shared_key.getText();
-				System.out.println("connect");
+				int flag = 0;
 				TCPClient tcp_client = new TCPClient();
-				tcp_client.main(args);
+				if (flag == 0) {
+				    String [] args = new String[3];
+					args[0] =  hostname.getText();
+				    args[1] = port.getText();
+				    args[2] = shared_key.getText();
+					System.out.println("connect");
+					tcp_client.main(args);
+					
+					flag = 1;
+				} else {
+					//tcp_client.close();`
+	
+				}
 			}
 		});
 		
