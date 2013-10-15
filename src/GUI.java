@@ -4,6 +4,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
+import java.util.*;
+
 public class GUI extends JFrame {
 	
 	/** Variables **/
@@ -19,7 +21,8 @@ public class GUI extends JFrame {
 	
 	private toggle toggle_switch = toggle.Client;
 	
-	private StepTracer trace;
+	public Vector<String> trace_steps;
+
 	/** End of Variables **/
 	
 	/** Test Variables **/
@@ -46,8 +49,8 @@ public class GUI extends JFrame {
 		
 		setVisible(true);
 		
-		trace = new StepTracer();
-		
+		//trace = new StepTracer();
+		trace_steps = new Vector<String>();
 		gui_listener();
 	}
 	
@@ -132,13 +135,13 @@ public class GUI extends JFrame {
 				
 				String test_step = test_insert.getText();
 				//System.out.println(test_step);
-				trace.insert_steps(test_step);
+				trace_steps.add(null);
 			}
 		});
 		
 		test_get_step.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String text = trace.print_steps();
+				String text = trace_steps.get(1);
 				//JTextArea temp = new JTextArea(text);
 				test_get.setText(text);
 			}
