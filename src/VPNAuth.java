@@ -1,5 +1,5 @@
 
-public class VPN_Auth {
+public class VPNAuth {
 
 	/**
 	 * @param args
