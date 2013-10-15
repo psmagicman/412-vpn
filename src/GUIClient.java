@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 
 public class GUIClient extends JFrame {
@@ -40,7 +41,7 @@ public class GUIClient extends JFrame {
 	
 	public GUIClient() {
 		
-		setSize(800, 600);
+		setSize(400, 400);
 		toolkit = getToolkit();
 		screen = toolkit.getScreenSize();
 		setLocation(screen.width / 2 - getWidth() / 2, screen.height / 2 - getHeight() / 2);
@@ -81,6 +82,7 @@ public class GUIClient extends JFrame {
 		
 		// set grid panels
 		JPanel frame_grid = new JPanel();
+		frame_grid.setBorder(new EmptyBorder(10, 10, 10, 10) );
 		frame_grid.setLayout(new GridLayout(6, 2));
 		
 		// add the elements to the panel
@@ -109,9 +111,10 @@ public class GUIClient extends JFrame {
 
 		message_connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			    String [] args = new String[2];
+			    String [] args = new String[3];
 				args[0] =  hostname.getText();
 			    args[1] = port.getText();
+			    args[2] = shared_key.getText();
 				System.out.println("connect");
 				TCPClient tcp_client = new TCPClient();
 				tcp_client.main(args);

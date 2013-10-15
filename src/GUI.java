@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -41,6 +43,7 @@ public class GUI extends JFrame {
 	 */
 	private void define_variables() {
 		JPanel buttons_area = new JPanel();
+		buttons_area.setBorder(new EmptyBorder(10, 10, 10, 10) );
 		buttons_area.setLayout(new GridLayout(4, 1));
 		
 		// define the buttons and title

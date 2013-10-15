@@ -8,6 +8,7 @@ public class TCPClient {
 		String clientMessage = "hello world";
 		String hostname = args[0];
 		int port = Integer.parseInt(args[1]);
+		String sharedKey = args[2];
 		
 		try {
 			Socket clientSocket = new Socket(hostname, port);
