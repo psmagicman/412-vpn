@@ -21,7 +21,7 @@ public class GUI extends JFrame {
 	
 	private toggle toggle_switch = toggle.Client;
 	
-	public Vector<String> trace_steps;
+	public Queue<String> trace_steps;
 
 	/** End of Variables **/
 	
@@ -50,7 +50,7 @@ public class GUI extends JFrame {
 		setVisible(true);
 		
 		//trace = new StepTracer();
-		trace_steps = new Vector<String>();
+		trace_steps = new LinkedList<String>();
 		gui_listener();
 	}
 	
@@ -134,14 +134,24 @@ public class GUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				String test_step = test_insert.getText();
-				//System.out.println(test_step);
-				trace_steps.add(null);
+				try {
+					trace_steps.add(test_step);
+				}
+				catch(IllegalStateException i) {
+					System.out.println("queue is full");
+				}
 			}
 		});
 		
 		test_get_step.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String text = trace_steps.get(1);
+				String text = null;
+				try {
+					text = trace_steps.poll();
+				}
+				catch(NullPointerException n) {
+					System.out.println("trying to poll from empty vector");
+				}
 				//JTextArea temp = new JTextArea(text);
 				test_get.setText(text);
 			}
