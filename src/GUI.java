@@ -19,7 +19,7 @@ public class GUI extends JFrame {
 	
 	private toggle toggle_switch = toggle.Client;
 	
-	private Step_Tracer trace;
+	private StepTracer trace;
 	/** End of Variables **/
 	
 	/** Test Variables **/
@@ -46,7 +46,7 @@ public class GUI extends JFrame {
 		
 		setVisible(true);
 		
-		trace = new Step_Tracer();
+		trace = new StepTracer();
 		
 		gui_listener();
 	}
