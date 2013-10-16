@@ -21,17 +21,17 @@ public class GUI extends JFrame {
 	
 	private toggle toggle_switch = toggle.Client;
 	
-	public Queue<String> trace_steps;
+	public static Queue<String> trace_steps;
 
 	/** End of Variables **/
 	
 	/** Test Variables **/
-	private JTextField test_insert;
+	/*private JTextField test_insert;
 	private JButton test_send_step;
 	private JTextField test_get;
 	private JButton test_get_step;
 	private JPanel test_panel;
-	private JPanel super_test_panel;
+	private JPanel super_test_panel;*/
 	/** End Test Variables **/
 	
 	public GUI() {
@@ -80,14 +80,15 @@ public class GUI extends JFrame {
 		buttons_area.add(server_toggle);
 		buttons_area.add(toggle_confirm);
 		buttons_area.add(crypto_test);
+		add(buttons_area);
 		
-		JPanel test_panel = define_test();
+		/*JPanel test_panel = define_test();
 		
 		JPanel super_test_panel = new JPanel();
 		super_test_panel.setLayout(new GridLayout(2,1));
 		super_test_panel.add(buttons_area);
 		super_test_panel.add(test_panel);
-		add(super_test_panel);
+		add(super_test_panel);*/
 		
 	}
 	
@@ -96,6 +97,8 @@ public class GUI extends JFrame {
 	 * This function is responsible for actionlistener of the radio buttons
 	 */
 	private void gui_listener() {
+		
+		DataTracer data_frame = new DataTracer();
 		
 		client_toggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -130,7 +133,7 @@ public class GUI extends JFrame {
 			}
 		});
 		
-		test_send_step.addActionListener(new ActionListener() {
+		/*test_send_step.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				String test_step = test_insert.getText();
@@ -138,7 +141,7 @@ public class GUI extends JFrame {
 					trace_steps.add(test_step);
 				}
 				catch(IllegalStateException i) {
-					System.out.println("queue is full");
+					System.out.println("ISE Message: " + i.getMessage());
 				}
 			}
 		});
@@ -150,16 +153,16 @@ public class GUI extends JFrame {
 					text = trace_steps.poll();
 				}
 				catch(NullPointerException n) {
-					System.out.println("trying to poll from empty vector");
+					System.out.println("NPE Message: " + n.getMessage());
 				}
 				//JTextArea temp = new JTextArea(text);
 				test_get.setText(text);
 			}
-		});
+		});*/
 		
 	}
 	
-	private JPanel define_test() {
+	/*private JPanel define_test() {
 		JPanel test_panel = new JPanel();
 		test_panel.setLayout(new GridLayout(2,2));
 		
@@ -178,5 +181,5 @@ public class GUI extends JFrame {
 		
 		return test_panel;
 		
-	}
+	}*/
 }
