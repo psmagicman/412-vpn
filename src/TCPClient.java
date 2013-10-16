@@ -100,4 +100,16 @@ public class TCPClient {
 			System.out.println("IOException Client: " + e.getMessage());
 		}
 	}
+	
+	public String getClientString(Socket clientSocket) {
+		String clientMessage = "";
+		try {
+			BufferedReader clientBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			clientMessage = clientBuffer.readLine();
+		} catch(IOException e) {
+			System.out.println("IOexception Server: " + e.getMessage());
+		}
+		
+		return clientMessage;
+	}
 }

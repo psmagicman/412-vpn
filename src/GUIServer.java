@@ -113,7 +113,8 @@ public class GUIServer extends JFrame {
 				String [] args = new String[2];
 				args[0] =  port.getText();
 				args[1] = shared_key.getText();
-				tcp_server.main(args);					
+				tcp_server.main(args);		
+				
 			}
 		});
 		
