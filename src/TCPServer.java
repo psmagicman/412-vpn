@@ -5,13 +5,14 @@ import java.io.*;
 import javax.crypto.SecretKey;
 
 public class TCPServer {
-	String sharedSecret = "REPLACE ME FROM GUI =D";
+	String sharedSecret;
 	Key publicKey;
 	SecretKey aesKey;
 	public void main (String args[])
 	{
 		// port number needs to be grabbed from the GUI
-		int port = 2345;
+		int port = Integer.parseInt(args[0]);
+		sharedSecret = args[1];
 		
 		try {
 			ServerSocket listenerSocket = new ServerSocket(port);

@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 public class GUIClient extends JFrame {
 
 	Socket clientSocket = null;
+	TCPClient tcp_client = null;
 	
 	/** Variables **/
 	private Toolkit toolkit;
@@ -114,7 +115,7 @@ public class GUIClient extends JFrame {
 
 		message_connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TCPClient tcp_client = new TCPClient();
+				tcp_client = new TCPClient();
 				if (clientSocket == null) {
 				    String [] args = new String[3];
 					args[0] =  hostname.getText();
@@ -128,6 +129,8 @@ public class GUIClient extends JFrame {
 				} else {
 					try {
 						clientSocket.close();
+						//clientSocket = null;
+						System.out.println("connection closed.");
 					} catch (IOException error) {
 						System.out.println("IOException: " + error.getMessage());
 					}
@@ -138,6 +141,13 @@ public class GUIClient extends JFrame {
 		message_send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("send");
+				String [] args = new String[1];
+				args[0] =  send_message.getText();
+				//args[1] =  clientSocket.toString();
+				if (tcp_client != null){
+					tcp_client.send(args);
+					System.out.println("sending:" + args[0]);
+				}
 			}
 		});
 		

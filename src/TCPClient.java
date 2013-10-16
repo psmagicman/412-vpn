@@ -5,22 +5,22 @@ import java.io.*;
 import javax.crypto.SecretKey;
 
 public class TCPClient {
-	String sharedSecret = "REPLACE ME FROM GUI =D";
+	String sharedSecret;
 	KeyPair keys;
 	SecretKey aesKey;
 	private Socket clientSocket;
 	public void main (String args[])
 	{
 		// values specified from the GUI
-		String clientMessage = "hello world";
+		//String clientMessage = "hello world";
 		String hostname = args[0];
 		int port = Integer.parseInt(args[1]);
-		String sharedKey = args[2];
+		sharedSecret = args[2];
 		
 		try {
 			clientSocket = new Socket(hostname, port);
-			DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
-			toServer.writeBytes(clientMessage);
+			//DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
+			//toServer.writeBytes(clientMessage);
 			
 			//clientSocket.close();
 	
@@ -28,6 +28,8 @@ public class TCPClient {
 			System.out.println("IOException Client: " + e.getMessage());
 		}
 	}
+	
+
 	
 	/**
 	 *  This function will be called in tandem with the corresponding auth in TCPServer.java
@@ -84,7 +86,18 @@ public class TCPClient {
 		return clientSocket;
 	}
 	
-	public void writeMessage(){
+	public void send (String args[])
+	{
+		// values specified from the GUI
+		String clientMessage = args[0];
 		
+		try {
+			DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
+			toServer.writeBytes(clientMessage);
+		
+	
+		} catch (IOException e){
+			System.out.println("IOException Client: " + e.getMessage());
+		}
 	}
 }
