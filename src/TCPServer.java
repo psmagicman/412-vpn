@@ -1,5 +1,6 @@
 import java.net.*;
-import java.security.Key;
+import java.security.KeyPair;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.io.*;
 
@@ -9,7 +10,8 @@ import javax.swing.JOptionPane;
 
 public class TCPServer {
 	String sharedSecret;
-	Key publicKey;
+	PublicKey clientPublicKey;
+	KeyPair serverKeyPair;
 	SecretKey aesKey;
 	
 	ServerSocket listenerSocket;
@@ -104,14 +106,17 @@ public class TCPServer {
 				String clientResp = VPNCrypto.decryptAES(aesKey, (AESCipher)ois.readObject());
 				String identity = clientResp.substring(0, "CLIENT".length());
 				int clientRespNonce = Integer.parseInt(clientResp.substring("CLIENT".length()));
+				//if successful exchange RSA pub keys for signature validation during conversations
 				if (identity.equals("CLIENT")&&clientRespNonce==nonce){
 					oos.writeInt(1);
 					oos.flush();
-					System.out.println("succeeded");
+					serverKeyPair = VPNCrypto.generateRSAKeys();
+					clientPublicKey = (PublicKey) ois.readObject();
+					oos.writeObject(serverKeyPair.getPublic());
+					oos.flush();
 					return true;
 				}
 				else{
-					System.out.println("failed");
 					oos.writeInt(0);
 					oos.flush();
 					return false;

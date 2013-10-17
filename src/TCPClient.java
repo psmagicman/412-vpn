@@ -1,5 +1,6 @@
 import java.net.*;
 import java.security.KeyPair;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.io.*;
 
@@ -9,7 +10,8 @@ import javax.swing.JOptionPane;
 
 public class TCPClient {
 	String sharedSecret;
-	KeyPair keys;
+	KeyPair clientKeyPair;
+	PublicKey serverPublicKey;
 	SecretKey aesKey;
 	private Socket clientSocket;
 	public void main (String args[])
@@ -85,13 +87,16 @@ public class TCPClient {
 				return false;
 			}
 			//wait for server authentication result - same code (0 = failure)
+			//if successful exchange RSA pub keys for signature validation during conversations
 			if (ois.readInt()==1){
-				System.out.println("succeeded");
+				clientKeyPair = VPNCrypto.generateRSAKeys();
+				oos.writeObject(clientKeyPair.getPublic());
+				oos.flush();
+				serverPublicKey = (PublicKey) ois.readObject();
 				return true;
 
 			}
 			else{
-				System.out.println("failed");
 				return false;
 			}
 		} catch (EOFException e) {
