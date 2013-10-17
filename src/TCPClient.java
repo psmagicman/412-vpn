@@ -27,7 +27,11 @@ public class TCPClient {
 			clientSocket = new Socket(hostname, port);
 			GUI.trace_steps.add("client socket created");
 			ret = auth(clientSocket);
-	
+			if (ret == false) {
+				clientSocket.close();
+				JOptionPane.showMessageDialog(null, "Connection Failed -Please restart client.");
+				
+			}
 		} catch (IOException e){
 			System.out.println("IOException Client: " + e.getMessage());
 		}
