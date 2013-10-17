@@ -36,6 +36,9 @@ public class GUIServer extends JFrame {
 	
 	private JPanel frame_grid;
 	
+	TCPServer tcp_server = null;
+
+	
 	/** End Variables **/
 	
 	public GUIServer() {
@@ -109,11 +112,12 @@ public class GUIServer extends JFrame {
 
 		message_connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TCPServer tcp_server = new TCPServer();
+				tcp_server = new TCPServer();
 				String [] args = new String[2];
 				args[0] =  port.getText();
 				args[1] = shared_key.getText();
-				tcp_server.main(args);		
+				tcp_server.main(args);	
+				clientSocket = tcp_server.getClientSocket();
 				
 			}
 		});
@@ -121,6 +125,9 @@ public class GUIServer extends JFrame {
 		message_send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("send");
+				String clientMessage = tcp_server.getClientString(clientSocket);
+				System.out.println(clientMessage);
+				receive_message.setText(clientMessage);		
 			}
 		});
 	}

@@ -86,16 +86,15 @@ public class TCPClient {
 		return clientSocket;
 	}
 	
-	public void send (String args[])
+	public void send(String args[])
 	{
 		// values specified from the GUI
 		String clientMessage = args[0];
 		
 		try {
 			DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
-			toServer.writeBytes(clientMessage);
-		
-	
+			toServer.writeBytes(clientMessage + "\n");
+			toServer.flush();
 		} catch (IOException e){
 			System.out.println("IOException Client: " + e.getMessage());
 		}

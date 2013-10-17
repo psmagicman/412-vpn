@@ -10,6 +10,8 @@ public class TCPServer {
 	SecretKey aesKey;
 	
 	ServerSocket listenerSocket;
+	Socket clientSocket;
+	BufferedReader clientBuffer;
 	public void main (String args[])
 	{
 		// port number needs to be grabbed from the GUI
@@ -20,11 +22,17 @@ public class TCPServer {
 			listenerSocket = new ServerSocket(port);
 			
 			System.out.println("Started listening");
-			Socket clientSocket = listenerSocket.accept();
-			//getClientString(clientSocket);
+			clientSocket = listenerSocket.accept();
+			clientBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			//String clientString = getClientString(clientSocket);
+			//System.out.println(clientString);
 		} catch(IOException e) {
 			System.out.println("IOexception: " + e.getMessage());
 		}
+	}
+	
+	public Socket getClientSocket() {
+		return clientSocket;
 	}
 	
 	
@@ -34,15 +42,13 @@ public class TCPServer {
 	 *  Return: String
 	 */
 	public String getClientString(Socket clientSocket) {
-		String clientMessage = "";
+		String clientString = "";
 		try {
-			BufferedReader clientBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			clientMessage = clientBuffer.readLine();
-		} catch(IOException e) {
-			System.out.println("IOexception Server: " + e.getMessage());
+			clientString = clientBuffer.readLine();
+		} catch(IOException e){
+			
 		}
-		
-		return clientMessage;
+		return clientString;
 	}
 	
 	/**
