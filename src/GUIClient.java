@@ -55,6 +55,7 @@ public class GUIClient extends JFrame {
 		define_client_gui();
 		setTitle(frame_title.getText());
 		setVisible(true);
+		GUI.trace_steps.add("Client GUI constructed");
 		gui_client_listener();
 	}
 	
@@ -105,6 +106,8 @@ public class GUIClient extends JFrame {
 		
 		// add the panel to the frame
 		add(frame_grid);
+		
+		GUI.trace_steps.add("Client GUI elements defined");
 	}
 	
 	/**
@@ -131,6 +134,7 @@ public class GUIClient extends JFrame {
 						clientSocket.close();
 						//clientSocket = null;
 						System.out.println("connection closed.");
+						GUI.trace_steps.add("connection closed");
 					} catch (IOException error) {
 						System.out.println("IOException: " + error.getMessage());
 					}
@@ -147,6 +151,7 @@ public class GUIClient extends JFrame {
 				if (tcp_client != null){
 					tcp_client.send(args);
 					System.out.println("sending:" + args[0]);
+					GUI.trace_steps.add("client message sending");
 				}
 			}
 		});

@@ -53,6 +53,7 @@ public class GUIServer extends JFrame {
 		define_server_gui();
 		setTitle(frame_title.getText());
 		setVisible(true);
+		GUI.trace_steps.add("server GUI constructed");
 		gui_server_listener();
 	}
 	
@@ -102,6 +103,7 @@ public class GUIServer extends JFrame {
 		
 		// add to grid to the frame
 		add(frame_grid);
+		GUI.trace_steps.add("server GUI elements defined");
 	}
 	
 	/**
@@ -126,8 +128,10 @@ public class GUIServer extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("send");
 				String clientMessage = tcp_server.getClientString(clientSocket);
+				GUI.trace_steps.add("message received from client");
 				System.out.println(clientMessage);
-				receive_message.setText(clientMessage);		
+				receive_message.setText(clientMessage);
+				
 			}
 		});
 	}

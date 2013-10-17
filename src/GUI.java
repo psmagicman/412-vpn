@@ -47,6 +47,8 @@ public class GUI extends JFrame {
 		define_variables();
 		setTitle(frame_title.getText());
 		
+		
+		DataTracer data_frame = new DataTracer();
 		setVisible(true);
 		
 		//trace = new StepTracer();
@@ -98,7 +100,7 @@ public class GUI extends JFrame {
 	 */
 	private void gui_listener() {
 		
-		DataTracer data_frame = new DataTracer();
+		//DataTracer data_frame = new DataTracer();
 		
 		client_toggle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -118,10 +120,12 @@ public class GUI extends JFrame {
 					case Client:
 						setVisible(false);
 						GUIClient client_gui = new GUIClient();
+						trace_steps.add("client mode");
 						break;
 					case Server:
 						setVisible(false);
 						GUIServer server_gui = new GUIServer();
+						trace_steps.add("server mode");
 						break;
 				}
 			}

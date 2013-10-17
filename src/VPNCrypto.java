@@ -55,6 +55,7 @@ public class VPNCrypto {
 	public static AESCipher encryptAES(SecretKey key, String message) throws Exception {
 		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		aes.init(Cipher.ENCRYPT_MODE, key);
+		GUI.trace_steps.add("message encrypted with AES");
 		// need to have the iv carry over or else there will be an invalid key exception thrown at the decryption phase
 		return new AESCipher(aes.getIV(), aes.doFinal(message.getBytes()));
 	}
@@ -70,7 +71,7 @@ public class VPNCrypto {
 	public static String decryptAES(SecretKey key, AESCipher cipher) throws Exception {
 		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		aes.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(cipher.iv));
-
+		GUI.trace_steps.add("message decrypted with AES");
 		return new String(aes.doFinal(cipher.ciphertext));
 	}
 
@@ -93,6 +94,7 @@ public class VPNCrypto {
 		int iterations = 10000;
 		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 		SecretKey temp = factory.generateSecret(new PBEKeySpec(input_key.toCharArray(), salt, iterations, 128));
+		GUI.trace_steps.add("secret key generated");
 		return new SecretKeySpec(temp.getEncoded(), "AES");
 	}
 
@@ -106,11 +108,13 @@ public class VPNCrypto {
 			keyGen = KeyPairGenerator.getInstance("RSA");
 			keyGen.initialize(512);
 			KeyPair keys = keyGen.genKeyPair();
+			GUI.trace_steps.add("RSAKeys generated");
 			return keys;
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		GUI.trace_steps.add("RSAKeys failed to generate");
 		return null;
 	}
 	/** 
@@ -125,6 +129,7 @@ public class VPNCrypto {
 			rsa = Cipher.getInstance("RSA");
 			rsa.init(Cipher.ENCRYPT_MODE, publicKey);
 			byte[] encrypted  = rsa.doFinal(plaintext.getBytes());
+			GUI.trace_steps.add("message encrypted with RSA");
 			return encrypted;
 
 		} catch (NoSuchAlgorithmException e) {
@@ -143,6 +148,7 @@ public class VPNCrypto {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		GUI.trace_steps.add("RSA encrypted null");
 		return null;
 	}
 
@@ -155,8 +161,9 @@ public class VPNCrypto {
 	public static String decryptRSA(Key privateKey, byte[] ciphertext){
 		Cipher rsa;
 		try {
-			rsa = Cipher.getInstance("RSA");
+			rsa = Cipher.getInstance("RSA encrypted message deciphered");
 	 		rsa.init(Cipher.DECRYPT_MODE, privateKey);
+	 		GUI.trace_steps.add("message decrypted with RSA");
 	 		return new String (rsa.doFinal(ciphertext), "UTF-8");
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
@@ -177,6 +184,7 @@ public class VPNCrypto {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		GUI.trace_steps.add("RSA decrypted null");
 		return null;
 	}
 

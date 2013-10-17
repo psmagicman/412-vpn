@@ -28,6 +28,7 @@ public class TCPServer {
 			clientBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			//String clientString = getClientString(clientSocket);
 			//System.out.println(clientString);
+			GUI.trace_steps.add("connection received");
 		} catch(IOException e) {
 			System.out.println("IOexception: " + e.getMessage());
 		}

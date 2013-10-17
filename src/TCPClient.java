@@ -23,7 +23,7 @@ public class TCPClient {
 			clientSocket = new Socket(hostname, port);
 			//DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
 			//toServer.writeBytes(clientMessage);
-			
+			GUI.trace_steps.add("client socket created");
 			//clientSocket.close();
 	
 		} catch (IOException e){
@@ -142,6 +142,7 @@ public class TCPClient {
 			System.out.println("IOexception Server: " + e.getMessage());
 		}
 		
+		GUI.trace_steps.add("message ready to send");
 		return clientMessage;
 	}
 }
