@@ -43,7 +43,19 @@ public class VPNCrypto {
 	public VPNCrypto() {
 
 	}
-
+	
+	public static MessageGram sendMessage(String plaintext, SecretKey aesKey, PrivateKey privKey) throws Exception{
+		AESCipher cipher = encryptAES(aesKey, plaintext);
+		return new MessageGram (cipher, VPNAuth.computeSignature(privKey, cipher.ciphertext));
+	}
+	
+	public static String receiveMessage(MessageGram mg, SecretKey aesKey, PublicKey pubKey) throws Exception{
+		String plaintext = decryptAES(aesKey, mg.ciphertext);
+		if (VPNAuth.verifySignature(pubKey, mg.ciphertext.ciphertext, mg.signature))
+			return plaintext;
+		else
+			return "Integrity of this message has been compromised";
+	}
 	// http://stackoverflow.com/questions/4319496/how-to-encrypt-and-decrypt-data-in-java
 	// http://www.coderanch.com/t/525677/Security/AES-decryption-InvalidKeyException-Parameters-missing
 	/**
