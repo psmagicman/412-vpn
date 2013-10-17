@@ -162,6 +162,7 @@ public class GUIClient extends JFrame {
 				while (true) {
 					if (tcp_client != null){
 						String clientMessage = tcp_client.getClientString(clientSocket);
+						GUI.trace_steps.add("message received from server");
 						System.out.println(clientMessage);
 						receive_message.setText(clientMessage);
 					}

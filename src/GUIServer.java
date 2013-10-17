@@ -134,6 +134,7 @@ public class GUIServer extends JFrame {
 				if (tcp_server != null){
 					tcp_server.send(args);
 					System.out.println("sending:" + args[0]);
+					GUI.trace_steps.add("server message sending");
 				}
 			}
 		});
