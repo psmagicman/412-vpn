@@ -40,8 +40,6 @@ import java.util.*;
 
 public class VPNCrypto {
 
-	private static byte[] iv;
-
 	public VPNCrypto() {
 
 	}
@@ -54,14 +52,13 @@ public class VPNCrypto {
 	 * @return
 	 * @throws Exception
 	 */
-	public static byte[] encrypt_AES(SecretKey key, String message) throws Exception {
+	public static AESCipher encryptAES(SecretKey key, String message) throws Exception {
 		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		aes.init(Cipher.ENCRYPT_MODE, key);
 		// need to have the iv carry over or else there will be an invalid key exception thrown at the decryption phase
-		iv = aes.getIV();
-
-		return aes.doFinal(message.getBytes());
+		return new AESCipher(aes.getIV(), aes.doFinal(message.getBytes()));
 	}
+
 
 	/**
 	 * 
@@ -70,11 +67,11 @@ public class VPNCrypto {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String decrypt_AES(SecretKey key, byte[] ciphertext) throws Exception {
+	public static String decryptAES(SecretKey key, AESCipher cipher) throws Exception {
 		Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
-		aes.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+		aes.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(cipher.iv));
 
-		return new String(aes.doFinal(ciphertext));
+		return new String(aes.doFinal(cipher.ciphertext));
 	}
 
 	/**
@@ -122,7 +119,7 @@ public class VPNCrypto {
 	 * @param plaintext the plaintext to encrypt
 	 * @return byte array containing ciphertext of plaintext
 	 */
-	public static byte[] encrypt_RSA(Key publicKey, String plaintext){
+	public static byte[] encryptRSA(Key publicKey, String plaintext){
 		Cipher rsa;
 		try {
 			rsa = Cipher.getInstance("RSA");
@@ -155,7 +152,7 @@ public class VPNCrypto {
 	 * @param ciphertext the ciphertext that will be decrypted
 	 * @return the plaintext
 	 */
-	public static String decrypt_RSA(Key privateKey, byte[] ciphertext){
+	public static String decryptRSA(Key privateKey, byte[] ciphertext){
 		Cipher rsa;
 		try {
 			rsa = Cipher.getInstance("RSA");

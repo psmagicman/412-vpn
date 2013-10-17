@@ -1,7 +1,9 @@
 import java.net.*;
 import java.security.KeyPair;
+import java.security.SecureRandom;
 import java.io.*;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.SecretKey;
 
 public class TCPClient {
@@ -36,51 +38,82 @@ public class TCPClient {
 	 * @param skt
 	 * @return
 	 */
+	/**
+	 *  This function will be called in tandem with the corresponding auth in TCPServer.java
+	 *  This function is based on slide 37 of Authentication/Key establishment lecture slides
+	 *  Mutual authentication with symmetric key
+	 * @param skt
+	 * @return
+	 * @throws  
+	 * @throws Exception 
+	 */
 	public boolean auth(Socket skt) {
-        try {
+		System.out.println("Running auth");
+		try{
 			ObjectInputStream ois = new ObjectInputStream(skt.getInputStream());
 			ObjectOutputStream oos = new ObjectOutputStream(skt.getOutputStream());
+			//for generating nonces
+			SecureRandom sr = new SecureRandom();
+			byte[] nonceBytes = new byte[4];
+			sr.nextBytes(nonceBytes);
+			int nonce = byteArrayToInt(nonceBytes);
+			aesKey = VPNCrypto.generate_secret_key(sharedSecret);
 
-        	//first generate the RSA keypair
-			keys = VPNCrypto.generateRSAKeys();
-			//next ,need to send over public key so that first phase auth (server send back secret) can occur
-			oos.writeObject(keys.getPublic());
-			//receive the encrypted secret pass phrase and symm key and check its validity, if it checks out, 
-			//then respond with the secret encoded with symm key
-			int encryptedSize = ois.readInt();
-			byte[] encrypted = new byte[encryptedSize];
-			ois.read(encrypted);
-			aesKey = (SecretKey) ois.readObject();
-			if(VPNCrypto.decrypt_RSA(keys.getPrivate(), encrypted).equals(sharedSecret)){
-				byte[] respEncoded = VPNCrypto.encrypt_AES(aesKey, sharedSecret);
-				oos.writeInt(respEncoded.length);
-				oos.write(respEncoded);
+			//first, send over hello string and nonce
+			oos.writeUTF("CLIENT");
+			oos.writeInt(nonce);
+			oos.flush();
+
+			//expect back the server nonce and encrypted message E("SERVER", clientNonce, symmetricKey)
+			int serverNonce = ois.readInt();
+			AESCipher serverTest = (AESCipher) ois.readObject();
+			//perform checks to see if nonce and entity name (SERVER) are corrrect 
+			//if so then send back E("CLIENT", serverNonce, symmetricKey) so server can authenticate identity
+			String serverTestString = VPNCrypto.decryptAES(aesKey, serverTest);
+			String identity = serverTestString.substring(0, "SERVER".length());
+			int serverTestNonce = Integer.parseInt(serverTestString.substring("SERVER".length()));
+			if (identity.equals("SERVER") && serverTestNonce==nonce){
+				//send response status 1 = passed first stage auth
+				oos.writeInt(1);
+				oos.writeObject(VPNCrypto.encryptAES(aesKey, "CLIENT"+serverNonce));
+				oos.flush();
 			}
-			else {
-				byte[] failMessage = "FAILED".getBytes();
-				oos.writeInt(failMessage.length);
-				oos.write(failMessage);
+			else{
+				oos.writeInt(0);
+				oos.flush();
 				return false;
 			}
-			//second phase - expect back response from server seeing if secret phrase encoded with symm key was right
-			String secondPhaseStatus = ois.readUTF();
-			if (secondPhaseStatus.equals("PASS"))
+			//wait for server authentication result - same code (0 = failure)
+			if (ois.readInt()==1){
+				System.out.println("succeeded");
 				return true;
-			else
+
+			}
+			else{
+				System.out.println("failed");
 				return false;
-				
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			}
+		} catch (EOFException e) {
+			System.out.println("Connection termminated due to mismatched Shared Secret Value");
+		} catch(IOException e){	
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch(BadPaddingException e){
+			System.out.println("Bad key - mismatched Shared Secret Value");
+			return false;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		return false;
+	}
+
+	public int byteArrayToInt(byte[] b) 
+	{
+		return   b[3] & 0xFF |
+				(b[2] & 0xFF) << 8 |
+				(b[1] & 0xFF) << 16 |
+				(b[0] & 0xFF) << 24;
 	}
 	public Socket getClientSocket(){
 		return clientSocket;
