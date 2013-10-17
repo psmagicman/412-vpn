@@ -5,6 +5,7 @@ import java.io.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.SecretKey;
+import javax.swing.JOptionPane;
 
 public class TCPServer {
 	String sharedSecret;
@@ -104,11 +105,14 @@ public class TCPServer {
 			}
 		} catch (EOFException e) {
 			System.out.println("Connection termminated due to mismatched Shared Secret Value");
+			JOptionPane.showMessageDialog(null, "Connection termminated due to mismatched Shared Secret Value");
+			return false;
 		} catch(IOException e){	
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch(BadPaddingException e){
+			JOptionPane.showMessageDialog(null, "Bad key - mismatched Shared Secret Value");
 			System.out.println("Bad key - mismatched Shared Secret Value");
 			return false;
 		} catch (Exception e) {
