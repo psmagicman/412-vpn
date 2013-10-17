@@ -155,7 +155,7 @@ public class TCPClient {
 		try {
 			ObjectInputStream clientBuffer = new ObjectInputStream(clientSocket.getInputStream());
 			recieve_package = (MessageGram) clientBuffer.readObject();
-			clientMessage = VPNCrypto.receiveMessage(recieve_package, aesKey, clientKeyPair.getPublic());
+			clientMessage = VPNCrypto.receiveMessage(recieve_package, aesKey, serverPublicKey);
 		} catch(IOException e) {
 			System.out.println("IOexception Server: " + e.getMessage());
 		} catch(Exception e) {

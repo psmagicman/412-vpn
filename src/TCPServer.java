@@ -78,7 +78,7 @@ public class TCPServer {
 		try {
 			ObjectInputStream clientBuffer = new ObjectInputStream(clientSocket.getInputStream());
 			recieve_package = (MessageGram) clientBuffer.readObject();
-			clientMessage = VPNCrypto.receiveMessage(recieve_package, aesKey, serverKeyPair.getPublic());
+			clientMessage = VPNCrypto.receiveMessage(recieve_package, aesKey, clientPublicKey);
 		} catch(IOException e) {
 			System.out.println("IOexception Server: " + e.getMessage());
 		} catch(Exception e) {
