@@ -28,10 +28,18 @@ public class TCPServer {
 			listenerSocket = new ServerSocket(port);
 			
 			System.out.println("Started listening");
-			clientSocket = listenerSocket.accept();
-			clientBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			GUI.trace_steps.add("connection received");
-			ret = auth(clientSocket);
+			while (true) {
+				clientSocket = listenerSocket.accept();
+				clientBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				GUI.trace_steps.add("connection received");
+				ret = auth(clientSocket);
+				if (ret == false) {
+					
+					clientSocket.close();
+				} else {
+					break;
+				}
+			}
 		} catch(IOException e) {
 			System.out.println("IOexception: " + e.getMessage());
 		}
