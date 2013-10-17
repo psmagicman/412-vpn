@@ -49,6 +49,23 @@ public class TCPServer {
 		return clientSocket;
 	}
 	
+	public void send(String args[])
+	{
+		// values specified from the GUI
+		String clientMessage = args[0];
+		MessageGram send_package;
+		
+		try {
+			send_package = VPNCrypto.sendMessage(clientMessage, aesKey, serverKeyPair.getPrivate());
+			ObjectOutputStream toServer = new ObjectOutputStream(clientSocket.getOutputStream());
+			toServer.writeObject(send_package);
+			toServer.flush();
+		} catch (IOException e){
+			System.out.println("IOException Server: " + e.getMessage());
+		} catch (Exception e) {
+			System.out.println("Exception Server: " + e.getMessage());
+		}
+	}
 	
 	/*
 	 *  Input: clientSocket
@@ -56,28 +73,23 @@ public class TCPServer {
 	 *  Return: String
 	 */
 	public String getClientString(Socket clientSocket) {
-		String clientString = "";
+		String clientMessage = "";
+		MessageGram recieve_package;
 		try {
-			clientString = clientBuffer.readLine();
-		} catch(IOException e){
-			
+			ObjectInputStream clientBuffer = new ObjectInputStream(clientSocket.getInputStream());
+			recieve_package = (MessageGram) clientBuffer.readObject();
+			clientMessage = VPNCrypto.receiveMessage(recieve_package, aesKey, serverKeyPair.getPublic());
+		} catch(IOException e) {
+			System.out.println("IOexception Server: " + e.getMessage());
+		} catch(Exception e) {
+			System.out.println("Exception Server: " + e.getMessage());
 		}
-		return clientString;
+		
+		GUI.trace_steps.add("message ready to send");
+		return clientMessage;
 	}
 	
-	public void send(String args[])
-	{
-		// values specified from the GUI
-		String clientMessage = args[0];
-		
-		try {
-			DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
-			toServer.writeBytes(clientMessage + "\n");
-			toServer.flush();
-		} catch (IOException e){
-			System.out.println("IOException Client: " + e.getMessage());
-		}
-	}
+
 	
 	/**
 	 * This function will be called in tandem with the corresponding auth in TCPCLient.java

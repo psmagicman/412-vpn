@@ -135,23 +135,31 @@ public class TCPClient {
 	{
 		// values specified from the GUI
 		String clientMessage = args[0];
+		MessageGram send_package;
 		
 		try {
-			DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
-			toServer.writeBytes(clientMessage + "\n");
+			send_package = VPNCrypto.sendMessage(clientMessage, aesKey, clientKeyPair.getPrivate());
+			ObjectOutputStream toServer = new ObjectOutputStream(clientSocket.getOutputStream());
+			toServer.writeObject(send_package);
 			toServer.flush();
 		} catch (IOException e){
 			System.out.println("IOException Client: " + e.getMessage());
+		} catch (Exception e){
+			System.out.println("Exception Client: " + e.getMessage());
 		}
 	}
 	
 	public String getClientString(Socket clientSocket) {
 		String clientMessage = "";
+		MessageGram recieve_package;
 		try {
-			BufferedReader clientBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			clientMessage = clientBuffer.readLine();
+			ObjectInputStream clientBuffer = new ObjectInputStream(clientSocket.getInputStream());
+			recieve_package = (MessageGram) clientBuffer.readObject();
+			clientMessage = VPNCrypto.receiveMessage(recieve_package, aesKey, clientKeyPair.getPublic());
 		} catch(IOException e) {
 			System.out.println("IOexception Server: " + e.getMessage());
+		} catch(Exception e) {
+			System.out.println("Exception Server: " + e.getMessage());
 		}
 		
 		GUI.trace_steps.add("message ready to send");
