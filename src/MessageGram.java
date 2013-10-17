@@ -1,5 +1,11 @@
+import java.io.Serializable;
 
-public class MessageGram {
+
+public class MessageGram implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3078148301408414865L;
 	byte[] signature;
 	AESCipher ciphertext;
 	
