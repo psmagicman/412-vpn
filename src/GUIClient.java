@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 
+
 public class GUIClient extends JFrame {
 
 	Socket clientSocket = null;
@@ -128,11 +129,12 @@ public class GUIClient extends JFrame {
 					tcp_client.main(args);
 					
 					clientSocket = tcp_client.getClientSocket();
+					Thread t = new Thread(new client_receiver());
+			        t.start();
 					
 				} else {
 					try {
 						clientSocket.close();
-						//clientSocket = null;
 						System.out.println("connection closed.");
 						GUI.trace_steps.add("connection closed");
 					} catch (IOException error) {
@@ -144,10 +146,9 @@ public class GUIClient extends JFrame {
 		
 		message_send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("send");
 				String [] args = new String[1];
+				System.out.println("send");
 				args[0] =  send_message.getText();
-				//args[1] =  clientSocket.toString();
 				if (tcp_client != null){
 					tcp_client.send(args);
 					System.out.println("sending:" + args[0]);
@@ -155,7 +156,17 @@ public class GUIClient extends JFrame {
 				}
 			}
 		});
-		
 	}
-
+		private class client_receiver implements Runnable {
+			public void run() {
+				while (true) {
+					if (tcp_client != null){
+						String clientMessage = tcp_client.getClientString(clientSocket);
+						System.out.println(clientMessage);
+						receive_message.setText(clientMessage);
+					}
+				}
+			}
+		}
 }
+

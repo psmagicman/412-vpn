@@ -120,20 +120,38 @@ public class GUIServer extends JFrame {
 				args[1] = shared_key.getText();
 				tcp_server.main(args);	
 				clientSocket = tcp_server.getClientSocket();
+				Thread t = new Thread(new server_receiver());
+		        t.start();
 				
 			}
 		});
 		
 		message_send.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String [] args = new String[1];
 				System.out.println("send");
-				String clientMessage = tcp_server.getClientString(clientSocket);
-				GUI.trace_steps.add("message received from client");
-				System.out.println(clientMessage);
-				receive_message.setText(clientMessage);
-				
+				args[0] =  send_message.getText();
+				if (tcp_server != null){
+					tcp_server.send(args);
+					System.out.println("sending:" + args[0]);
+				}
 			}
 		});
+
+		
+		
+	}
+	private class server_receiver implements Runnable {
+		public void run() {
+			while (true) {
+				if (tcp_server != null){
+					String clientMessage = tcp_server.getClientString(clientSocket);
+					GUI.trace_steps.add("message received from client");
+					System.out.println(clientMessage);
+					receive_message.setText(clientMessage);	
+				}
+			}
+		}
 	}
 
 }

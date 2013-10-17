@@ -55,6 +55,20 @@ public class TCPServer {
 		return clientString;
 	}
 	
+	public void send(String args[])
+	{
+		// values specified from the GUI
+		String clientMessage = args[0];
+		
+		try {
+			DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
+			toServer.writeBytes(clientMessage + "\n");
+			toServer.flush();
+		} catch (IOException e){
+			System.out.println("IOException Client: " + e.getMessage());
+		}
+	}
+	
 	/**
 	 * This function will be called in tandem with the corresponding auth in TCPCLient.java
 	 * This function is based on slide 37 of Authentication/Key establishment lecture slides
