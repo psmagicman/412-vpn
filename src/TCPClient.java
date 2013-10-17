@@ -20,14 +20,13 @@ public class TCPClient {
 		//String clientMessage = "hello world";
 		String hostname = args[0];
 		int port = Integer.parseInt(args[1]);
+		boolean ret = false;
 		sharedSecret = args[2];
 		
 		try {
 			clientSocket = new Socket(hostname, port);
-			//DataOutputStream toServer = new DataOutputStream(clientSocket.getOutputStream());
-			//toServer.writeBytes(clientMessage);
 			GUI.trace_steps.add("client socket created");
-			//clientSocket.close();
+			ret = auth(clientSocket);
 	
 		} catch (IOException e){
 			System.out.println("IOException Client: " + e.getMessage());

@@ -21,6 +21,7 @@ public class TCPServer {
 	{
 		// port number needs to be grabbed from the GUI
 		int port = Integer.parseInt(args[0]);
+		boolean ret = false;
 		sharedSecret = args[1];
 		
 		try {
@@ -29,9 +30,8 @@ public class TCPServer {
 			System.out.println("Started listening");
 			clientSocket = listenerSocket.accept();
 			clientBuffer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			//String clientString = getClientString(clientSocket);
-			//System.out.println(clientString);
 			GUI.trace_steps.add("connection received");
+			ret = auth(clientSocket);
 		} catch(IOException e) {
 			System.out.println("IOexception: " + e.getMessage());
 		}
